@@ -1,23 +1,30 @@
 {
-  "name": "mcp-image-compression",
+  "name": "@inhiblab-core/mcp-image-compression",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && shx chmod +x dist/*.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "rimraf dist && tsc --watch",
+    "build": "rimraf dist && tsc && shx chmod +x dist/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "rimraf dist && tsc && node server.js ",
+    "inspector": "npx @modelcontextprotocol/inspector npx node dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.6.3",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "express": "^4.21.2",
     "fastmcp": "^1.20.4",
     "shx": "^0.3.4",
     "typescript": "^5.8.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "18.x"
+    "@types/node": "18.x",
+    "rimraf": "^6.0.1"
   }
 }
