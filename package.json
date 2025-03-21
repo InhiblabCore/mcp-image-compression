@@ -12,8 +12,6 @@
     "inspector": "export IMAGE_COMPRESSION_DOWNLOAD_DIR=/Users/yangjie/Downloads && pnpm build && npx @modelcontextprotocol/inspector npx node dist/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "packageManager": "pnpm@10.6.3",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
@@ -29,5 +27,8 @@
   "devDependencies": {
     "@types/node": "18.x",
     "rimraf": "^6.0.1"
-  }
+  },
+  "repository": "https://github.com/InhiblabCore/mcp-image-compression",
+	"author": "NelsonYong",
+	"license": "MIT"
 }
