@@ -9,11 +9,8 @@ import {
   CallToolResult,
 } from "@modelcontextprotocol/sdk/types.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { compressAndStoreImage, isImageSource } from "./common.js";
 
-const a = new FastMCP({
-  name: "mcp-image-compression",
-  version: "1.0.0",
-})
 const TOOLS: Tool[] = [
   {
     name: "image_compression",
@@ -23,18 +20,25 @@ const TOOLS: Tool[] = [
       properties: {
         url: {
           type: "string",
-          description: "URL of the image to compress"
+          description: "URL of the image to compress,If it's a local file, do not add any prefix.",
         },
+        quantity: {
+          type: "number",
+          description: "Number of transcripts to return",
+          default: 0.8
+        }
       },
-      required: ["url"]
+      required: ["url", "quantity"]
     }
   }
 ];
 
 
 
+
 class MCPImageCompression {
   server: Server;
+  downloadDir: string;
   constructor() {
     this.server = new Server({
       name: "mcp-image-compression",
@@ -45,6 +49,11 @@ class MCPImageCompression {
       },
     });
 
+    // 从环境变量中取到下载目录
+    // this.downloadDir = process.env.DOWNLOAD_DIR || "./tmp";
+
+    // console.log("this.downloadDir", this.downloadDir);
+    this.downloadDir = '/Users/yangjie/Downloads'
     this.setupHandlers();
     this.setupErrorHandling();
   }
@@ -74,41 +83,38 @@ class MCPImageCompression {
   /**
    * Handles tool call requests
    */
-  private async handleToolCall(name: string, args: any): Promise<{ toolResult: CallToolResult }> {
+  private async handleToolCall(name: string, args: any): Promise<CallToolResult> {
+    const { url = '' } = args;
+    if (!isImageSource(url)) {
+      throw new McpError(
+        ErrorCode.InvalidParams,
+        `Invalid Image URL: ${url}`
+      );
+    }
 
     switch (name) {
       case "image_compression": {
         try {
+          const outputPath = await compressAndStoreImage(url, this.downloadDir)
           return {
-            toolResult: {
-              content: [{
-                type: "text",
-                text: "success image compression",
-                metadata: {
-                  timestamp: new Date().toISOString(),
-                }
-              }],
-              isError: false
-            }
+            content: [{
+              type: "text",
+              text: `success image compression ${outputPath}`,
+            }],
+            metadata: {
+              timestamp: new Date().toISOString(),
+            },
+            isError: false
           }
         } catch (error) {
-          return {
-            toolResult: {
-              success: false,
-              content: [{
-                type: "text",
-                text: "Error",
-                metadata: {
-                  timestamp: new Date().toISOString(),
-                }
-              }],
-              error: {
-                code: ErrorCode.InternalError,
-                message: `Error while executing tool ${name}`
-              },
-              isError: true
-            }
-          };
+          if (error instanceof McpError) {
+            throw error;
+          }
+
+          throw new McpError(
+            ErrorCode.InternalError,
+            `Failed to process transcript: ${(error as Error).message}`
+          );
         }
       }
       default: {

@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc && shx chmod +x dist/*.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "rimraf dist && tsc && node server.js ",
-    "inspector": "npx @modelcontextprotocol/inspector npx node dist/index.js"
+    "inspector": "export IMAGE_COMPRESSION_DOWNLOAD_DIR=/Users/yangjie/Downloads && pnpm build && npx @modelcontextprotocol/inspector npx node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,10 +17,13 @@
   "packageManager": "pnpm@10.6.3",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
+    "axios": "^1.8.3",
     "express": "^4.21.2",
-    "fastmcp": "^1.20.4",
+    "sharp": "^0.33.5",
+    "shrinkpng": "1.2.0-beta.1",
     "shx": "^0.3.4",
     "typescript": "^5.8.2",
+    "uuid": "^11.1.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
