@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc && shx chmod +x dist/*.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "rimraf dist && tsc && node server.js ",
-    "inspector": "export IMAGE_COMPRESSION_DOWNLOAD_DIR=/Users/yangjie/Downloads && pnpm build && npx @modelcontextprotocol/inspector npx node dist/index.js"
+    "inspector": "npx @modelcontextprotocol/inspector npx node dist/index.js"
   },
   "keywords": [
     "MCP server",
