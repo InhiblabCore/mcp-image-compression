@@ -1,5 +1,5 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { FastMCP } from 'fastmcp'
+import path from 'path';
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
@@ -19,7 +19,7 @@ const TOOLS: Tool[] = [
       type: "object",
       properties: {
         url: {
-          type: "string",
+          type: "string[]",
           description: "URL of the image to compress,If it's a local file, do not add any prefix.",
         },
         quantity: {
@@ -49,11 +49,7 @@ class MCPImageCompression {
       },
     });
 
-    // 从环境变量中取到下载目录
-    // this.downloadDir = process.env.DOWNLOAD_DIR || "./tmp";
-
-    // console.log("this.downloadDir", this.downloadDir);
-    this.downloadDir = '/Users/yangjie/Downloads'
+    this.downloadDir = process.env.IMAGE_COMPRESSION_DOWNLOAD_DIR || ''
     this.setupHandlers();
     this.setupErrorHandling();
   }
@@ -84,7 +80,7 @@ class MCPImageCompression {
    * Handles tool call requests
    */
   private async handleToolCall(name: string, args: any): Promise<CallToolResult> {
-    const { url = '' } = args;
+    const { url = [] } = args;
     if (!isImageSource(url)) {
       throw new McpError(
         ErrorCode.InvalidParams,
@@ -92,14 +88,30 @@ class MCPImageCompression {
       );
     }
 
+    if (this.downloadDir === '') {
+      throw new McpError(
+        ErrorCode.InvalidParams,
+        `downloadDir is empty, please set the environment variable IMAGE_COMPRESSION_DOWNLOAD_DIR`
+      );
+    }
+
+    let outputPaths = []
     switch (name) {
       case "image_compression": {
         try {
-          const outputPath = await compressAndStoreImage(url, this.downloadDir)
+          const isMutipleUrls = url.length > 1;
+          const downloadDir = isMutipleUrls ? path.join(this.downloadDir, 'thumbs') : this.downloadDir;
+          // 循环处理每个 URL
+          // 压缩并存储图片
+          for (const key in url) {
+            const imageUrl = url[key];
+            const outputPath = await compressAndStoreImage(imageUrl, downloadDir)
+            outputPaths.push(outputPath)
+          }
           return {
             content: [{
               type: "text",
-              text: `success image compression ${outputPath}`,
+              text: `success image compression ${outputPaths}`,
             }],
             metadata: {
               timestamp: new Date().toISOString(),
