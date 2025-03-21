@@ -18,14 +18,18 @@ const TOOLS: Tool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        url: {
+        urls: {
           type: "string[]",
           description: "URL of the image to compress,If it's a local file, do not add any prefix.",
         },
         quantity: {
           type: "number",
           description: "Number of transcripts to return",
-          default: 0.8
+          default: 80
+        },
+        format: {
+          type: "string",
+          description: "Image format",
         }
       },
       required: ["url", "quantity"]
@@ -80,14 +84,9 @@ class MCPImageCompression {
    * Handles tool call requests
    */
   private async handleToolCall(name: string, args: any): Promise<CallToolResult> {
-    const { url = [] } = args;
-    if (!isImageSource(url)) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        `Invalid Image URL: ${url}`
-      );
-    }
+    const { urls = [], quality = 80, format = null } = args;
 
+    const imageSources = (urls as string[])?.filter((url) => isImageSource(url));
     if (this.downloadDir === '') {
       throw new McpError(
         ErrorCode.InvalidParams,
@@ -99,13 +98,13 @@ class MCPImageCompression {
     switch (name) {
       case "image_compression": {
         try {
-          const isMutipleUrls = url.length > 1;
+          const isMutipleUrls = imageSources.length > 1;
           const downloadDir = isMutipleUrls ? path.join(this.downloadDir, 'thumbs') : this.downloadDir;
           // 循环处理每个 URL
           // 压缩并存储图片
-          for (const key in url) {
-            const imageUrl = url[key];
-            const outputPath = await compressAndStoreImage(imageUrl, downloadDir)
+          for (const key in imageSources) {
+            const imageUrl = imageSources[key];
+            const outputPath = await compressAndStoreImage(imageUrl, downloadDir, quality, format)
             outputPaths.push(outputPath)
           }
           return {

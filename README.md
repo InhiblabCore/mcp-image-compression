@@ -7,29 +7,22 @@ mcp-image-compression is a high-performance image compression microservice based
 ## Features
 
 - **Multi-format support**: Compress mainstream image formats including JPEG, PNG, WebP, AVIF
+- **Offline Usage**: No need to connect to the internet to use
 - **Smart compression**: Automatically select optimal compression parameters based on image content
 - **Batch processing**: Support parallel compression of multiple images for improved efficiency
 - **Quality control**: Customizable compression quality to balance file size and visual quality
 
-## Quick Start
+## TOOLS
 
-1. Clone the repository:
+1. `image_compression`
+   - Image compression
+   - Inputs:
+     - `urls` (strings): URLs of images to compress
+     - `quality` (int): Quality of compression (0-100)
+     - `format` (string): Format of compressed image (e.g. "jpeg", "png", "webp", "avif")
+   - Returns: Compressed images url
 
-   ```bash
-   git clone URL_ADDRESS.com/your-username/mcp-image-compression.git
-   cd mcp-image-compression
-   ```
+## License
 
-2. Install dependencies:
+This MCP server is licensed under the MIT License. This means you are free to use, modify, and distribute the software, subject to the terms and conditions of the MIT License. For more details, please see the LICENSE file in the project repository.
 
-   ```bash
-   npm install
-   ```
-
-3. Start the service:
-
-   ```bash
-   npm start
-   ```
-
-   

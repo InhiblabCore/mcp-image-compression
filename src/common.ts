@@ -10,7 +10,8 @@ type ImageSource = string;
 export async function compressAndStoreImage(
   imageUrl: ImageSource,
   outputDir: string,
-  quality = 80
+  quality = 80,
+  format = null,
 ): Promise<string> {
   try {
     // 校验输出目录
@@ -36,8 +37,12 @@ export async function compressAndStoreImage(
       inputBuffer = await fs.promises.readFile(imageUrl);
     }
 
+    // 读取文件原始名称
+    const originalFilename = path.basename(imageUrl);
+    const originalExt = path.parse(originalFilename).ext;
+
     // 生成唯一文件名
-    const outputFilename = `${uuidv4()}.jpg`;
+    const outputFilename = format ? `${uuidv4()}.${format}` : `${uuidv4()}${originalExt}`;
     const outputPath = path.join(outputDir, outputFilename);
 
     // 使用 Sharp 进行图片处理
