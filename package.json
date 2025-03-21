@@ -1,9 +1,13 @@
 {
   "name": "@inhiblab-core/mcp-image-compression",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "type": "module",
   "main": "index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "watch": "rimraf dist && tsc --watch",
     "build": "rimraf dist && tsc && shx chmod +x dist/*.js",
