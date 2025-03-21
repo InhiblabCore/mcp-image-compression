@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+    <!-- 云服务器轮廓（保持原始比例） -->
+    <path d="M76 40c2.2 0 4.3.4 6.3 1.1 1.2-4.8-.8-9.9-4.7-13.1-4.5-3.6-10.6-4.4-15.9-2.5C59 20.1 54 18 48.5 18c-8.8 0-16.3 6-18.4 14.2-5.2.8-9.5 4.6-10.8 9.7-4.1.8-7.3 4.1-7.3 8.4 0 4.7 3.8 8.5 8.5 8.5H76c6.6 0 12-5.4 12-12s-5.4-12-12-12z" 
+          fill="#E3F2FD"/>
+    
+    <!-- 图片压缩核心元素（自动等比放大） -->
+    <g transform="translate(30 32) scale(1)">
+        <rect x="0" y="0" width="24" height="24" rx="2" fill="#2196F3"/>
+        <path d="M6 6h12v12H6z" fill="#BBDEFB"/>
+        <path d="M34 12l-8 8h6v8h4v-8h6l-8-8z" 
+              fill="#FF9800"
+              transform="rotate(90 32 16)"/>
+        <rect x="44" y="4" width="16" height="16" rx="2" fill="#4CAF50"/>
+        <path d="M52 8h4v4h-4z" fill="#C8E6C9"/>
+    </g>
+</svg>
