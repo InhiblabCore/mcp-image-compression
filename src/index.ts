@@ -32,7 +32,7 @@ const TOOLS: Tool[] = [
           description: "Image format",
         }
       },
-      required: ["url"]
+      required: ["urls"]
     }
   }
 ];
