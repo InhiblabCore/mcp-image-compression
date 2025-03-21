@@ -11,7 +11,7 @@ export async function compressAndStoreImage(
   imageUrl: ImageSource,
   outputDir: string,
   quality = 80,
-  format = null,
+  format = 'jpg',
 ): Promise<string> {
   try {
     // 校验输出目录
@@ -45,11 +45,10 @@ export async function compressAndStoreImage(
     const outputFilename = format ? `${uuidv4()}.${format}` : `${uuidv4()}${originalExt}`;
     const outputPath = path.join(outputDir, outputFilename);
 
-    // 使用 Sharp 进行图片处理
     await sharp(inputBuffer)
-      .jpeg({
+      // @ts-ignore
+      .toFormat(format ? format : originalExt?.replace('.', ''), {
         quality,
-        mozjpeg: true
       })
       .toFile(outputPath);
 
