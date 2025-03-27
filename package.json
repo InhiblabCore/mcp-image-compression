@@ -1,29 +1,33 @@
 {
   "name": "@inhiblab-core/mcp-image-compression",
-  "version": "0.0.5",
+  "version": "0.1.1",
   "description": "",
   "type": "module",
   "main": "index.js",
+  "bin": {
+    "@inhiblab-core/mcp-image-compression": "./bin/www.js"
+  },
   "files": [
     "dist",
+    "bin",
     "README.md"
   ],
   "scripts": {
     "watch": "rimraf dist && tsc --watch",
     "build": "rimraf dist && tsc && shx chmod +x dist/*.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "rimraf dist && tsc && node server.js ",
+    "start": "pnpm build && node dist/index.js",
     "inspector": "npx @modelcontextprotocol/inspector npx node dist/index.js"
   },
   "keywords": [
     "MCP server",
     "image compression"
   ],
-  "packageManager": "pnpm@10.6.3",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
     "axios": "^1.8.3",
     "express": "^4.21.2",
+    "file-type": "^20.4.1",
     "sharp": "^0.33.5",
     "shrinkpng": "1.2.0-beta.1",
     "shx": "^0.3.4",
@@ -36,6 +40,6 @@
     "rimraf": "^6.0.1"
   },
   "repository": "https://github.com/InhiblabCore/mcp-image-compression",
-	"author": "NelsonYong",
-	"license": "MIT"
+  "author": "NelsonYong",
+  "license": "MIT"
 }
