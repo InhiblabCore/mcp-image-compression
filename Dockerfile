@@ -1,14 +1,32 @@
-# Stage 1: Build the application
-FROM node:18-alpine AS builder
+# Use the official uv Debian image as base
+FROM ghcr.io/astral-sh/uv:debian
 
-# Set working directory
+# Install Node.js and npm
+RUN apt-get update && apt-get install -y \
+  curl \
+  gnupg \
+  && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y nodejs \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+# Verify Node.js and npm installation
+RUN node --version && npm --version
+
+# Verify uv is installed correctly
+RUN uv --version
+
+# Verify npx is available
+RUN npx --version || npm install -g npx
+
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package.json package-lock.json ./
+# Copy package files
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy the rest of the application
 COPY . .
@@ -16,18 +34,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Stage 2: Create the production image
-FROM node:18-alpine AS production
+# Set environment variables
+ENV NODE_ENV=production
 
-# Set working directory
-WORKDIR /app
+# Expose the application port
+EXPOSE 3000
 
-# Copy the built files from the builder stage
-COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/package.json /app/package-lock.json /app/
-
-# Install production dependencies only
-RUN npm ci --omit=dev
-
-# Specify the default command
-ENTRYPOINT ["node", "dist/index.js"]
+# Run the application
+ENTRYPOINT ["node", "dist/index.js"] 
