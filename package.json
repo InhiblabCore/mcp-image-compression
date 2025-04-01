@@ -16,7 +16,7 @@
     "watch": "rimraf dist && tsc --watch",
     "build": "rimraf dist && tsc && shx chmod +x dist/*.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pnpm build && node dist/index.js",
+    "start": "pnpm build && node server.js",
     "inspector": "npx @modelcontextprotocol/inspector npx node dist/index.js"
   },
   "keywords": [
