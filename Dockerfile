@@ -1,44 +1,24 @@
-# Use the official uv Debian image as base
-FROM ghcr.io/astral-sh/uv:debian
+FROM node:20-alpine AS builder
 
-# Install Node.js and npm
-RUN apt-get update && apt-get install -y \
-  curl \
-  gnupg \
-  && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-  && apt-get install -y nodejs \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+COPY src /app/src
+COPY tsconfig.json /app/
+COPY package*.json /app/
 
-# Verify Node.js and npm installation
-RUN node --version && npm --version
-
-# Verify uv is installed correctly
-RUN uv --version
-
-# Verify npx is available
-RUN npx --version || npm install -g npx
-
-# Set the working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+RUN npm install
 
-# Install dependencies
-RUN npm ci
-
-# Copy the rest of the application
-COPY . .
-
-# Build the application
 RUN npm run build
 
-# Set environment variables
+FROM node:20-alpine AS release
+
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/package-lock.json /app/package-lock.json
+
 ENV NODE_ENV=production
 
-# Expose the application port
-EXPOSE 3000
+WORKDIR /app
 
-# Run the application
-ENTRYPOINT ["node", "dist/index.js"] 
+RUN npm ci --only=production
+ENTRYPOINT ["node", "dist/index.js"]

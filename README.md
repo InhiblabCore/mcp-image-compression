@@ -22,6 +22,35 @@ mcp-image-compression is a high-performance image compression microservice based
      - `format` (string): Format of compressed image (e.g. "jpeg", "png", "webp", "avif")
    - Returns: Compressed images url
 
+## Setup
+
+### NPX
+
+```json
+{
+  "mcpServers": {
+    "Image compression": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@inhiblab-core/mcp-image-compression"
+      ],
+      "env": {
+        "IMAGE_COMPRESSION_DOWNLOAD_DIR": "<YOUR_DIR>"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+## Build
+
+```bash
+docker build -t mcp-image-compression .
+```
+
 ## License
 
 This MCP server is licensed under the MIT License. This means you are free to use, modify, and distribute the software, subject to the terms and conditions of the MIT License. For more details, please see the LICENSE file in the project repository.

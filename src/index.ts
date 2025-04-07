@@ -157,11 +157,10 @@ class MCPImageCompression {
   }
 }
 
+const server = new MCPImageCompression();
 
 // Main execution
 async function main() {
-  const server = new MCPImageCompression();
-
   try {
     await server.start();
   } catch (error) {
@@ -174,3 +173,8 @@ main().catch((error) => {
   console.error("Fatal server error:", error);
   process.exit(1);
 });
+
+process.on('SIGINT', async () => {
+  await server.stop();
+  process.exit(0);
+})
