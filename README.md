@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-mcp-image-compression is a high-performance image compression microservice based on MCP (Micro Content Processing) architecture. This service focuses on providing fast and high-quality image compression capabilities to help developers optimize image resources for websites and applications, improving loading speed and user experience.
+mcp-image-compression is a high-performance image compression microservice based on MCP (Modal Context Protocol) architecture. This service focuses on providing fast and high-quality image compression capabilities to help developers optimize image resources for websites and applications, improving loading speed and user experience.
 
 ## Features
 
