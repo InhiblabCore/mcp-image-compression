@@ -19,8 +19,8 @@ const TOOLS: Tool[] = [
       type: "object",
       properties: {
         urls: {
-          type: "string[]",
-          description: "URL of the image to compress,If it's a local file, do not add any prefix.",
+          type: "string",
+          description: "URL of the image to compress,If it's a local file, do not add any prefix. array join by ','",
         },
         quantity: {
           type: "number",
@@ -84,9 +84,9 @@ class MCPImageCompression {
    * Handles tool call requests
    */
   private async handleToolCall(name: string, args: any): Promise<CallToolResult> {
-    const { urls = [], quality = 80, format = null } = args;
+    const { urls, quality = 80, format = null } = args;
 
-    const imageSources = (urls as string[])?.filter((url) => isImageSource(url));
+    const imageSources = (urls as string)?.split(",")?.filter((url) => isImageSource(url));
     if (this.downloadDir === '') {
       throw new McpError(
         ErrorCode.InvalidParams,
