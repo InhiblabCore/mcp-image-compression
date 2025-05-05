@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/inhiblabcore-mcp-image-compression-badge.png)](https://mseep.ai/app/inhiblabcore-mcp-image-compression)
+
 # mcp-image-compression
 
 ## Project Overview
